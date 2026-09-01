@@ -447,6 +447,30 @@ const testCases: {
 ];
 
 describe('usePageChangeEffectNavigateLocation', () => {
+  it('returns to an encoded internal dynamic path with query and hash after authentication', () => {
+    const returnToPath =
+      '/object/person/20202020-b305-41e7-8c72-ba44072a4c58?viewId=b027c8c8-7641-4f07-a95d-ef30b2883074#activity';
+
+    window.history.replaceState(
+      {},
+      '',
+      `${AppPath.SignInUp}?${new URLSearchParams({ returnToPath })}`,
+    );
+
+    setupMockIsMatchingLocation(AppPath.SignInUp);
+    setupMockOnboardingStatus(OnboardingStatus.COMPLETED);
+    setupMockIsWorkspaceActivationStatusEqualsTo(false);
+    setupMockIsLogged(true);
+    setupMockIsOnAWorkspace(true);
+    setupMockUseQuery();
+    setupMockUseParams();
+    setupMockState();
+
+    expect(usePageChangeEffectNavigateLocation()).toEqual(returnToPath);
+
+    window.history.replaceState({}, '', '/');
+  });
+
   it.each(testCases)(
     'with location $loc and onboardingStatus $onboardingStatus and isWorkspaceSuspended $isWorkspaceSuspended should return $res`',
     ({

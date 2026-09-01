@@ -13,14 +13,14 @@ describe('isValidReturnToPath', () => {
     expect(isValidReturnToPath('objects/people')).toBe(false);
   });
 
-  it('should return false for double-slash paths', () => {
-    expect(isValidReturnToPath('//evil.com')).toBe(false);
-  });
-
-  it('should return false for backslash-tricked paths', () => {
-    expect(isValidReturnToPath('/\\evil.com')).toBe(false);
-    expect(isValidReturnToPath('/\\/evil.com')).toBe(false);
-    expect(isValidReturnToPath('/objects\\..\\evil')).toBe(false);
+  it.each([
+    '//evil.com',
+    '\\\\evil.com',
+    '/\\evil.com',
+    '\\/evil.com',
+    '/objects\\..\\evil',
+  ])('should return false for malformed separator path %s', (path) => {
+    expect(isValidReturnToPath(path)).toBe(false);
   });
 
   it('should return false for onboarding paths', () => {

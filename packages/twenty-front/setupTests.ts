@@ -4,6 +4,10 @@ import {
   TransformStream as NodeTransformStream,
   WritableStream as NodeWritableStream,
 } from 'node:stream/web';
+import {
+  TextDecoder as NodeTextDecoder,
+  TextEncoder as NodeTextEncoder,
+} from 'node:util';
 
 import { i18n } from '@lingui/core';
 import { SOURCE_LOCALE } from 'twenty-shared/translations';
@@ -13,6 +17,14 @@ i18n.load({ [SOURCE_LOCALE]: enMessages });
 i18n.activate(SOURCE_LOCALE);
 
 const globalWithWebStreams = globalThis as Record<string, unknown>;
+
+if (globalWithWebStreams.TextEncoder === undefined) {
+  globalWithWebStreams.TextEncoder = NodeTextEncoder;
+}
+
+if (globalWithWebStreams.TextDecoder === undefined) {
+  globalWithWebStreams.TextDecoder = NodeTextDecoder;
+}
 
 if (globalWithWebStreams.TransformStream === undefined) {
   globalWithWebStreams.TransformStream = NodeTransformStream;

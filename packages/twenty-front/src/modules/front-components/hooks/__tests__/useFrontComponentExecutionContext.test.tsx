@@ -306,17 +306,17 @@ describe('useFrontComponentExecutionContext', () => {
 
       await act(async () => {
         await result.current.frontComponentHostCommunicationApi.navigate(
-          '/settings' as never,
-          { id: '1' } as never,
-          { tab: 'general' } as never,
-          { replace: true } as never,
+          AppPath.RecordShowPage,
+          { objectNameSingular: 'person', objectRecordId: 'record-1' },
+          { tab: 'activity' },
+          { replace: true },
         );
       });
 
       expect(mockNavigateApp).toHaveBeenCalledWith(
-        '/settings',
-        { id: '1' },
-        { tab: 'general' },
+        AppPath.RecordShowPage,
+        { objectNameSingular: 'person', objectRecordId: 'record-1' },
+        { tab: 'activity' },
         { replace: true },
       );
     });

@@ -12,7 +12,7 @@ import { SettingsProtectedRouteWrapper } from '@/settings/components/SettingsPro
 import { SettingsSkeletonLoader } from '@/settings/components/SettingsSkeletonLoader';
 import { SettingPublicDomain } from '@/settings/domains/components/SettingPublicDomain';
 import { SettingsPath } from 'twenty-shared/types';
-import { getSettingsPath } from 'twenty-shared/utils';
+import { assertIsDefinedOrThrow, getSettingsPath } from 'twenty-shared/utils';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 const SettingsGraphQLPlayground = lazy(() =>
@@ -56,12 +56,16 @@ const getLegacySettingsPathRedirectPathname = (
 ) => {
   switch (to) {
     case SettingsPath.ApiKeyDetail:
+      assertIsDefinedOrThrow(params.apiKeyId);
+
       return getSettingsPath(SettingsPath.ApiKeyDetail, {
-        apiKeyId: params.apiKeyId ?? null,
+        apiKeyId: params.apiKeyId,
       });
     case SettingsPath.WebhookDetail:
+      assertIsDefinedOrThrow(params.webhookId);
+
       return getSettingsPath(SettingsPath.WebhookDetail, {
-        webhookId: params.webhookId ?? null,
+        webhookId: params.webhookId,
       });
     case SettingsPath.ApiWebhooks:
     case SettingsPath.NewApiKey:

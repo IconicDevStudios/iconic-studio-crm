@@ -1,23 +1,20 @@
 import qs from 'qs';
-import { generatePath, type PathParam } from 'react-router-dom';
 import { AppPath, type SettingsPath } from '../../types';
 import { isDefined } from '../validation';
+import { generateTypedPath } from './internal/generateTypedPath';
+import { type RoutePathParams } from './internal/RoutePathParams';
 
 export const getSettingsPath = <T extends SettingsPath>(
   to: T,
-  params?: {
-    [key in PathParam<`/${AppPath.Settings}/${T}`>]: string | null;
-  },
+  params?: RoutePathParams<`/${AppPath.Settings}/${T}`>,
   queryParams?: Record<string, any>,
   hash?: string,
 ) => {
-  let path = `/${AppPath.Settings}/${to}`;
+  const fullPath = `/${AppPath.Settings}/${to}` as const;
+  let path: string = fullPath;
 
   if (isDefined(params)) {
-    path = generatePath<`/${AppPath.Settings}/${T}`>(
-      `/${AppPath.Settings}/${to}`,
-      params,
-    );
+    path = generateTypedPath(fullPath, params);
   }
 
   if (isDefined(queryParams)) {
